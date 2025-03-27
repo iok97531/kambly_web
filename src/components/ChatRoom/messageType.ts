@@ -1,6 +1,6 @@
 type messageType = {
   text: string,
-  senderId: number
+  senderId?: number
 }
 
 export default messageType

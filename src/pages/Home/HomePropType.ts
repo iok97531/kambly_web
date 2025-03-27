@@ -1,8 +1,8 @@
-import messageType from "./messageType";
+import messageType from "../../components/ChatRoom/messageType";
 
 type HomePropType = {
   messages: Array<messageType>,
   message: string,
-  sendMessage: Function
+  sendMessage: React.MouseEventHandler<HTMLButtonElement>
 }
 export default HomePropType;
