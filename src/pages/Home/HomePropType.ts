@@ -1,4 +1,4 @@
-import messageType from "../../components/ChatRoom/messageType";
+import messageType from "../../components/ChatRoom/chatMessageType";
 
 type HomePropType = {
   messages: Array<messageType>,

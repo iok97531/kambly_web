@@ -1,2 +1,1 @@
-import ChatRoomContainder from "./ChatroomContainer";
-export default ChatRoomContainder
+export { default } from './ChatRoomContainer';

@@ -1,25 +1,25 @@
 import { socket } from "../../socket";
-import { useState, useEffect } from "react";
-import messageType from './messageType';
-import ChatRoomPropType from "./ChatroomPropType";
-import ChatRoomView from "./ChatroomView";
+import messageType from './chatMessageType';
+import ChatRoomPropType from "./ChatRoomPropType";
+import ChatRoomView from "./ChatRoomView";
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { useEffect, useState } from "react";
+import { action } from "mobx";
 
-
-
-const ChatRoomContainder: React.FC = () =>{
-  
-  
-  const [messages, setMessages] = useState<Array<messageType>>([]);
-  const [message, setMessage] = useState<string>("123321");
+const ChatRoomContainer: React.FC = observer(() =>{
+  let state = useLocalObservable(() => ({
+    messages: [] as Array<messageType>,
+    message: "123321",
+  }))
   
   // 소켓 연결 및 이벤트 리스너 등록
-  useEffect(() => {
+  useEffect(action(() => {
     socket.connect();
     
     // 서버에서 메시지 받기
     const handleMessage = (msg: messageType) => {
       console.log('msg: ', msg)
-      setMessages((prev) => [...prev, msg]);
+      state.messages = [...state.messages, msg];
     }
 
     socket.on("chatMessage", handleMessage);
@@ -28,19 +28,22 @@ const ChatRoomContainder: React.FC = () =>{
       socket.off("chatMessage", handleMessage);;
       socket.disconnect();
     };
-  }, []);
+  }), []);
   
-  const sendMessage: React.MouseEventHandler<HTMLButtonElement> = () => {
-    if (message.trim() !== "") {
-      console.log(message, messages)
-      socket.emit("chatMessage", message); // 서버로 메시지 전송
-      setMessages((prev) => [...prev, { text: message, senderId: 1 }]);
-      setMessage("12");
+  const sendMessage: React.MouseEventHandler<HTMLButtonElement> = action(() => {
+    if (state.message.trim() !== "") {
+      socket.emit("chatMessage", {
+        message: state.message,
+        fromUserId: 1,
+        toUserId: 2
+      }); // 서버로 메시지 전송
+      state.messages = [...state.messages, { message: state.message, fromUserId: 1, toUserId: 2 }];
+      state.message = "12";
     }
-  };
+  });
   
-  const props: ChatRoomPropType = { messages, message, sendMessage }
+  const props: ChatRoomPropType = { state, sendMessage }
   return <ChatRoomView {...props} />
-} 
+})
 
-export default ChatRoomContainder
+export default ChatRoomContainer;
