@@ -1,24 +1,27 @@
-import { useState } from 'react'
+import { StrictMode } from 'react'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import SignUp from './pages/SignUp'
+import Home from './pages/Home'
+import SignIn from './pages/SignIn/SignIn'
+import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 
 const App: React.FC = () => {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          
+          {/* Private routes 
+          <Route element={<PrivateRoute />}>
+            <Route path="/profile" element={<UserProfile />} />
+          </Route>
+          */}
+        </Routes>
+      </BrowserRouter>
+    </StrictMode>
+)}
 
 export default App

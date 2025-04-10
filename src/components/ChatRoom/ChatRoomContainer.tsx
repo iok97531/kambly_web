@@ -3,7 +3,7 @@ import messageType from './chatMessageType';
 import ChatRoomPropType from "./ChatRoomPropType";
 import ChatRoomView from "./ChatRoomView";
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { action } from "mobx";
 
 const ChatRoomContainer: React.FC = observer(() =>{
